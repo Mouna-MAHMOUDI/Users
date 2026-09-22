@@ -311,4 +311,17 @@ Les évolutions possibles du projet sont notamment :
 * documenter l'API avec Swagger / OpenAPI ;
 * ajouter des tests unitaires ;
 * ajouter des tests d'intégration ;
-* améliorer la
+* améliorer la gestion des erreurs ;
+* mettre en place une authentification JWT.
+
+---
+
+👩‍💻 Auteur
+
+Mouna Mahmoudi
+
+Projet réalisé dans le cadre d'une formation en développement d'applications Java / Spring Boot.
+
+🔗 GitHub
+
+Users — Mouna-MAHMOUDI
