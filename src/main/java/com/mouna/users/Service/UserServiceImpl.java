@@ -2,6 +2,7 @@ package com.mouna.users.Service;
 
 import com.mouna.users.Dao.UserDao;
 import com.mouna.users.Entity.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -10,14 +11,17 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public User createUser(String name, String email) {
-        User user = new  User(name, email);
+    public User createUser(String name, String email, String password) {
+        String passwordHash = passwordEncoder.encode(password);
+        User user = new  User(name, email, passwordHash,"ROLE_USER");
         return userDao.save(user);
     }
 
