@@ -19,14 +19,23 @@ public class JwtService {
         );
     }
 
-    public String generateToken(String username, String role) {
+    public String generateToken(String username, String role, String userId) {
         return Jwts.builder()
                 .subject(username)
+                .claim("userId", userId)
                 .claim("role",role)
                 .signWith(getSigningKey())
                 .compact();
     }
 
+    public String extractUserId(String token){
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("userId", String.class);
+    }
     public String extractUsername(String token){
         return Jwts.parser()
                 .verifyWith(getSigningKey())

@@ -4,39 +4,31 @@ import com.mouna.users.Entity.LoginRequest;
 import com.mouna.users.Entity.User;
 import com.mouna.users.Service.AuthService;
 import com.mouna.users.security.JwtService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private final AuthenticationManager authenticationManager;
+    private final AuthService authService;
     private final JwtService jwtService;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtService jwtService) {
-        this.authenticationManager = authenticationManager;
+    public AuthController(AuthService authService, JwtService jwtService) {
+        this.authService = authService;
         this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request){
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
+        User user = authService.login(
                 request.mail(),
                 request.password()
-        )
+
         );
 
-        String role = authentication.getAuthorities()
-                .iterator()
-                .next()
-                .getAuthority();
-
         String token= jwtService.generateToken(
-                request.mail(),
-                role
+                user.getMail(),
+                user.getRole(),
+                user.getId().toString()
         );
 
         return token;
